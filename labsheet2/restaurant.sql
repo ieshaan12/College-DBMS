@@ -4,7 +4,7 @@ ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id))
     + '.' + QUOTENAME(OBJECT_NAME(parent_object_id)) + 
     ' DROP CONSTRAINT ' + QUOTENAME(name) + ';'
 FROM sys.foreign_keys;
-EXEC sp_executesql @sql;EXEC sp_msforeachtable @Command1 = "DROP TABLE ?"
+EXEC sp_executesql @sql;--EXEC sp_msforeachtable @Command1 = "DROP TABLE ?"
 
 CREATE TABLE items (
   itemid CHAR(5) PRIMARY KEY, 
@@ -188,109 +188,3 @@ INSERT INTO orders VALUES (3,3,'CASTR','FRTSD',3.45,'26-JAN-2005 2:26:04.188');
 INSERT INTO orders VALUES (3,4,'CASTR','WATER',0.0,'26-JAN-2005 2:26:19.188');
 INSERT INTO orders VALUES (3,5,'CASTR','CHKSD',2.85,'26-JAN-2005 2:26:34.188');
 */
-SYSDATETIME();
-
---SELECT vendorid from ingredients where name = 'grape';
---select name from ingredients where foodgroup='fruit' and inventory>100;
---select distinct foodgroup from ingredients where name <> 'grape' and not foodgroup is null;
---select name, unitprice from ingredients where vendorid='VGRUS' order by unitprice;
---select max(dateadded) as "last date" from items;
---select referredby as vendor,count(vendorid) from vendors group by referredby having count(vendorid)>1; 
---SELECT a.name   FROM items a inner join items q  on a.price > q.price where q.name = 'Garden Salad';
---SELECT i.name, v.companyname AS Vendor   
---FROM ingredients i   
--- JOIN vendors v
---on i.vendorid=v.vendorid   
---ORDER BY v.vendorid ;
---SELECT itemid   
---FROM madewith mw, ingredients ing   
---WHERE mw.ingredientid = ing.ingredientid and foodgroup = 'Vegetable'   
---INTERSECT   
---SELECT itemid   
---FROM madewith mw, ingredients ing   
---WHERE mw.ingredientid = ing.ingredientid and foodgroup = 'Fruit';  
---SELECT itemid   
---FROM items   
---EXCEPT   
---SELECT itemid   
---FROM madewith mw, ingredients ing   
---WHERE mw.ingredientid = ing.ingredientid AND ing.name = 'Cheese';
-
---SELECT DISTINCT(itemid)   
---FROM madewith mw, ingredients ing   
---WHERE mw.ingredientid = ing.ingredientid AND ing.name <> 'Cheese'; 
-
-
---SELECT companyname FROM vendors WHERE (referredby =
---(SELECT vendorid
---FROM vendors
---WHERE companyname = 'Veggies_R_Us')) AND
---(vendorid = (SELECT vendorid
---FROM ingredients
---WHERE foodgroup = 'Milk'));
---SELECT vendorid, companyname
---FROM vendors v1
---WHERE (SELECT COUNT(*)
---FROM vendors v2
---WHERE v2.referredby = v1.vendorid) >= 2;
---select vendorid,companyname from vendors v1 where vendorid in (select referredby from vendors group by referredby having count(vendorid)>=2 );
---SELECT vendorid, companyname
---FROM vendors v1
---WHERE NOT EXISTS (SELECT *
---FROM vendors v2
---WHERE v2.referredby = v1.vendorid);
-
---SELECT vendorid, companyname
---FROM vendors v1
---WHERE vendorid NOT in (SELECT referredby
---FROM vendors v2
---WHERE v2.referredby = v1.vendorid);
---SELECT * FROM meals m
---WHERE EXISTS
---(SELECT *
---FROM partof p JOIN items on p.itemid=items.itemid
---JOIN madewith on items.itemid=madewith.itemid
---JOIN ingredients on madewith.ingredientid=ingredients.ingredientid WHERE foodgroup = 'Milk' AND m.mealid = p.mealid);
-
---SELECT * FROM meals m
---join partof p on m.mealid=p.mealid join items on p.itemid=items.itemid
---JOIN madewith on items.itemid=madewith.itemid
---JOIN ingredients on madewith.ingredientid=ingredients.ingredientid WHERE foodgroup = 'Milk';
-
---SELECT i.name, companyname
---FROM items i, vendors v
---WHERE NOT EXISTS (
---(SELECT m.ingredientid -- ingredients used in item
---FROM madewith m
---WHERE i.itemid = m.itemid)
---EXCEPT
---(SELECT ingredientid -- ingredients supplied by vendors
---FROM ingredients i
---WHERE i.vendorid = v.vendorid));
-
---SELECT i.name, companyname
---FROM items i, vendors v
---WHERE
---(SELECT COUNT(DISTINCT m.ingredientid) -- number of ingredients in item
---FROM madewith m
---WHERE i.itemid = m.itemid)
---= -- number of ingredients in item supplied by vendor
---(SELECT COUNT(DISTINCT m.ingredientid)
---FROM madewith m, ingredients n
---WHERE i.itemid = m.itemid AND m.ingredientid = n.ingredientid AND n.vendorid = v.vendorid);
-/*SELECT name, unitprice * inventory AS "Inventory Value",
-(SELECT MAX(unitprice * inventory) FROM ingredients) AS "Max. Value",
-(unitprice * inventory) / (SELECT AVG(unitprice * inventory)
-FROM ingredients) AS "Ratio"
-FROM ingredients;*/
-
-
-
-
-
-
-
-
-
-
-
